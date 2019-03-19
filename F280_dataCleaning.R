@@ -102,6 +102,9 @@ CFRP_omit <- F280[DISP_CD %in% CFRP_DISP][!(ORIGIN_NM %in% CFRP_countries)][!(LO
 F280$CLEAN[F280$F280_ID %in% CFRP_omit$F280_ID] <- "FALSE"
 F280$NOTES[F280$F280_ID %in% CFRP_omit$F280_ID] <- "CFRP disp code but not in CFRP"
 
+CFRP_omit_summary <- CFRP_omit[,.N, by = .(ORIGIN_NM, COMMODITY)]
+write.csv(CFRP_omit_summary, "CFRP_omit_summary.csv")
+
 # Which records have preclearance disp code but should not?
 Preclear_DISP <- c("PCIR", "PCNA")
 Preclear_countries <- c("Jamaica", "Chile")
@@ -112,6 +115,9 @@ Preclear_families <- c("Orchidaceae")
 Preclear_omit <-  F280[DISP_CD %in% Preclear_DISP][!(ORIGIN_NM %in% Preclear_countries)][!(COMMODITY %in% Preclear_commodities | Family == "Orchidaceae")]
 F280$CLEAN[F280$F280_ID %in% Preclear_omit$F280_ID] <- "FALSE"
 F280$NOTES[F280$F280_ID %in% Preclear_omit$F280_ID] <- "Not preclearance"
+
+Preclear_omit_summary <- Preclear_omit[,.N, by = .(ORIGIN_NM, COMMODITY)]
+write.csv(Preclear_omit_summary, "Preclear_omit_summary.csv")
 
 # Remove records without disposition code (n=5), pathway (35), location (1299), commodity (4), or origin (150).
 # 1,423 records removed in total (some records had missing values in multiple columns)
